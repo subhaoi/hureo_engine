@@ -7,7 +7,7 @@ This Flask application is designed to analyze customer feedback by processing co
 - **Conversation Analysis:** Analyzes chunks of customer feedback to identify issues and good features.
 - **Supercategory Mapping:** Categorizes identified issues and features into supercategories for a structured overview.
 - **Batch Processing:** Processes items in batches to efficiently handle large datasets.
-- **OpenAI Integration:** Utilizes OpenAI's GPT-3.5 model to interpret and categorize feedback.
+- **OpenAI Integration:** Utilizes OpenAI's GPT model to interpret and categorize feedback.
 - **REST API:** Offers a RESTful endpoint to accept conversation transcripts and return analyzed data.
 
 ## How It Works

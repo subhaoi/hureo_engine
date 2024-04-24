@@ -208,14 +208,21 @@ def process_conversations():
     
 
     # Convert tuple keys to string format
-    enhanced_aggregated_data_serializable = {}
+    # Convert the enhanced aggregated data into a list of dictionaries
+    enhanced_aggregated_data_list = []
     for key, value in enhanced_aggregated_data.items():
         supercategory, category, issue_feature, user, transcript_chunk = key
-        new_key = f"{supercategory}_{category}_{issue_feature}_{user}_{transcript_chunk}"
-        enhanced_aggregated_data_serializable[new_key] = value
+        enhanced_aggregated_data_list.append({
+            "category_level_1": supercategory,
+            "category_level_2": category,
+            "category_level_3": issue_feature,
+            "user": user,
+            "transcript_chunk": transcript_chunk,
+            "no_of_instances": value
+        })
 
-    # Use the serializable dictionary with jsonify
-    return jsonify(enhanced_aggregated_data_serializable)
+    # Use the list of dictionaries with jsonify to ensure the output is in the correct format
+    return jsonify(enhanced_aggregated_data_list)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)

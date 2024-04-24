@@ -144,9 +144,9 @@ Accepts a list of conversation transcripts and returns an analyzed and categoriz
 ```json
 [
   {
-    "category": "Uncategorized",
-    "type": "Issue",
-    "issue_feature": "Swigen Stomach Works",
+    "category_level_1": "Uncategorized",
+    "category_level_2": "Issue",
+    "category_level_3": "Swigen Stomach Works",
     "user": "user1",
     "transcript_chunk": "Unknown: Morning. Arunima: Yeah, I've started the recording. So you have any questions for me right now. Unknown: No, nothing. As of now. I'm just waiting to understand exactly. So basically, all are doing research on. Jismitha Poojary: Are you doing research on how Swigen stomach works Jismitha Poojary: for me? Or is it about the platform that you all want to know?",
     "no_of_instances": 1

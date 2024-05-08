@@ -56,50 +56,96 @@ Accepts a list of conversation transcripts and returns an analyzed and categoriz
 
 ```json
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "A list of users with their respective conversation transcripts",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
-      "id": {
-        "type": "integer"
+      "userID": {
+        "type": "string",
+        "description": "A unique identifier for each user"
       },
-      "startTime": {
-        "type": "number"
-      },
-      "endTime": {
-        "type": "number"
-      },
-      "name": {
-        "type": "string"
-      },
-      "message": {
-        "type": "string"
+      "transcript": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Unique identifier for the transcript entry"
+            },
+            "startTime": {
+              "type": "number",
+              "description": "Start time of the transcript segment"
+            },
+            "endTime": {
+              "type": "number",
+              "description": "End time of the transcript segment"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the entity speaking"
+            },
+            "message": {
+              "type": "string",
+              "description": "Content of the message spoken"
+            }
+          },
+          "required": ["id", "startTime", "endTime", "name", "message"]
+        }
       }
     },
-    "required": ["id", "startTime", "endTime", "name", "message"]
+    "required": ["userID", "transcript"]
   }
 }
+
 ```
 
 ### Sample Input
 
 ```json
 [
-  {
-    "id": 2,
-    "startTime": 11.77,
-    "endTime": 20,
-    "name": "Hureo UX Research Company",
-    "message": "I'm just testing it out, if recording and trans  this is edited from UI. edited!"
-  },
-  {
-    "id": 4,
-    "startTime": 31.45,
-    "endTime": 33.479,
-    "name": "Hureo UX Research Company",
-    "message": "updating after deployment"
-  }
+    {
+        "userID": "user1",
+        "transcript": [
+            {
+                "id": 2,
+                "startTime": 11.77,
+                "endTime": 20,
+                "name": "Hureo UX Research Company",
+                "message": "I'm just testing it out, if recording and trans  this is edited from UI. edited!"
+            },
+            {
+                "id": 4,
+                "startTime": 31.45,
+                "endTime": 33.479,
+                "name": "Hureo UX Research Company",
+                "message": "updating after deployment"
+            }
+        ]
+    },
+    {
+        "userID": "user2",
+        "transcript": [
+            {
+                "id": 2,
+                "startTime": 11.77,
+                "endTime": 20,
+                "name": "Hureo UX Research Company",
+                "message": "I'm just testing it out, if recording and trans this is edited from UI. edited!"
+            },
+            {
+                "id": 4,
+                "startTime": 31.45,
+                "endTime": 33.479,
+                "name": "Hureo UX Research Company",
+                "message": "updating after deployment"
+            }
+        ]
+    }
 ]
+
 ```
 
 ## Output

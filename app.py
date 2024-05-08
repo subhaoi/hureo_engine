@@ -9,6 +9,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+# Register the namespace
 
 # Set your OpenAI API key here
 openai.api_key = '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'
@@ -33,32 +34,30 @@ def understand_issues(message):
     '''
     return query_openai_chat_model(prompt)
 
-# def understand_issues(message):
-#     prompt = f'''Based on these message: {message}, what are the issues or good features mentioned mentioned in the customer feedback? represent the results as dictionary'''
-#     return query_openai_chat_model(prompt)
 
 def analyze_conversation_chunk(chunk_text):
     issues = understand_issues(chunk_text)   
     return issues
 
 
-# Function to group messages into chunks for analysis
 def group_messages_into_chunks(transcripts, chunk_size=10):
     chunks = []
-    chunk = ""
-    for i, transcript in enumerate(transcripts):
-        chunk += f"{transcript['name']}: {transcript['message']} "  # Add speaker name for context
-        if (i + 1) % chunk_size == 0 or i + 1 == len(transcripts):  # End of chunk or end of data
-            chunks.append(chunk.strip())
-            chunk = ""
+    for transcript in transcripts:
+        chunk = ""
+        messages = transcript['transcript']
+        user = transcript['userID']
+        for i, message in enumerate(messages):
+            chunk += f"{message['name']}: {message['message']} "
+            if (i + 1) % chunk_size == 0 or i + 1 == len(messages):
+                chunks.append((user, chunk.strip()))
+                chunk = ""
+        if chunk:  # add remaining chunk if any
+            chunks.append((user, chunk.strip()))
     return chunks
+
 
 issue_pattern = re.compile(r"'issues': \[([^\]]+)\]")
 good_feature_pattern = re.compile(r"'good_features': \[([^\]]+)\]")
-
-aggregated_data = defaultdict(int)
-distinct_issues = set()
-distinct_features = set()
 
 def extract_items(pattern, text):
     """Extracts and standardizes items from text using the given pattern."""
@@ -130,6 +129,7 @@ def process_in_batches(items, batch_size=50):
 def process_conversations():
     # Expecting JSON input containing a list of transcripts
     transcripts = request.json
+    print("data received")
     chunk_size = 5  # Optional chunk size parameter
 
     # Group messages into chunks
@@ -137,10 +137,13 @@ def process_conversations():
 
     # Analyze each chunk
     analysis_results = []
-    for chunk in chunks:
+    aggregated_data = defaultdict(int)
+    distinct_issues = set()
+    distinct_features = set()
+    for user, chunk in chunks:
         issues = analyze_conversation_chunk(chunk)
         analysis_results.append({
-            "user": "user1",
+            "user": user,
             "transcript_chunk": chunk,
             "issues": issues
         })
@@ -224,5 +227,7 @@ def process_conversations():
     # Use the list of dictionaries with jsonify to ensure the output is in the correct format
     return jsonify(enhanced_aggregated_data_list)
 
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000,debug=True)
+    app.run(debug=True)
+
